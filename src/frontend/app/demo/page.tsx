@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function DemoPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
+    <div className="px-6 py-14 sm:px-10 lg:px-16">
       <h1 className="text-3xl font-semibold tracking-tight">Run the pipeline</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">
         Download a sample invoice, upload it back, and run it. Extraction is mocked in your browser

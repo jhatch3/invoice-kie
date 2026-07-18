@@ -31,12 +31,12 @@ const FEATURES = [
 export function FeatureGrid() {
   return (
     <section className="border-t border-border/60 bg-muted/40">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+      <div className="px-6 py-20 sm:px-10 lg:px-16">
         <p className="text-sm font-medium text-primary">What you get</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">
           Built for invoice fields, not generic OCR
         </h2>
-        <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2">
+        <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f) => (
             <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} />
           ))}

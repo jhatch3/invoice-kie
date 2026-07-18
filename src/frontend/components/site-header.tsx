@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      <div className="flex h-14 items-center justify-between px-6 sm:px-10 lg:px-16">
         <Link href="/" className="flex items-center gap-2 font-medium tracking-tight">
           <FileText className="size-5 text-primary" aria-hidden />
           invoice-kie

@@ -7,7 +7,7 @@ const COLUMNS = ["Macro F1", "Latency", "Cost / 1k docs"] as const;
 export function BenchmarkTable() {
   return (
     <section id="benchmarks" className="scroll-mt-20 border-t border-border/60 bg-muted/40">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+      <div className="px-6 py-20 sm:px-10 lg:px-16">
         <p className="text-sm font-medium text-primary">Evaluation</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">Benchmarks</h2>
         <p className="mt-2 max-w-xl text-muted-foreground">

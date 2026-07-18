@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 export function CtaSection() {
   return (
     <section className="border-t border-border/60">
-      <div className="mx-auto max-w-6xl px-6 py-20 text-center sm:py-24">
+      <div className="px-6 py-20 text-center sm:px-10 sm:py-24 lg:px-16">
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Watch it read an invoice
         </h2>

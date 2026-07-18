@@ -6,7 +6,7 @@ import { HeroPreview } from "./hero-preview";
 export function Hero() {
   return (
     <section className="border-b border-border/60">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-28">
+      <div className="grid items-center gap-14 px-6 py-20 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-16 lg:py-28">
         <div>
           <p className="text-sm font-medium text-primary">Invoice field extraction</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
