@@ -1,0 +1,15 @@
+# invoice-kie backend (FastAPI) — API dependencies.
+# The heavy ML stack (torch/transformers) is intentionally NOT here; it arrives in Phase 2
+# behind the Pipeline interface. Install with:  pip install -r src/backend/requirements.txt
+
+fastapi>=0.111
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pydantic-settings>=2.3
+python-multipart>=0.0.9   # multipart/form-data file uploads
+
+# --- Dev / testing ---
+httpx>=0.27               # async test client (ASGITransport)
+pytest>=8.0
+pytest-asyncio>=0.23
+ruff>=0.4
