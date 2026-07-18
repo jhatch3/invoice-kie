@@ -12,26 +12,26 @@ const FEATURES = [
     icon: Braces,
     title: "Structured output",
     description:
-      "Every document becomes clean, normalized JSON: total, tax, subtotal, date, and invoice number.",
+      "Every document comes back as normalized JSON: total, tax, subtotal, date, and invoice number.",
   },
   {
     icon: Gauge,
-    title: "Fast & cheap",
+    title: "Fast and cheap",
     description:
-      "A fine-tuned model matches VLM accuracy at a fraction of the latency and cost per document.",
+      "A fine-tuned model matches the VLM's accuracy at a fraction of the latency and cost per document.",
   },
   {
     icon: ShieldCheck,
     title: "Benchmarked",
     description:
-      "Evaluated on public invoice datasets (CORD, DocILE) against a zero-shot VLM baseline.",
+      "Measured on the public CORD and DocILE datasets against a zero-shot VLM baseline.",
   },
 ] as const;
 
 export function FeatureGrid() {
   return (
-    <section className="mx-auto max-w-5xl px-4 py-12">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2">
         {FEATURES.map((f) => (
           <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} />
         ))}

@@ -4,15 +4,17 @@ import { buttonVariants } from "@/components/ui/button";
 
 export function CtaSection() {
   return (
-    <section className="mx-auto max-w-5xl px-4 py-16">
-      <div className="rounded-2xl border bg-card px-6 py-12 text-center">
-        <h2 className="text-2xl font-semibold tracking-tight">See the pipeline in action</h2>
-        <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
-          Download a sample invoice, upload it, and watch the fields get extracted — all in your
+    <section className="border-t border-border/60 bg-muted/40">
+      <div className="mx-auto max-w-6xl px-6 py-16 text-center sm:py-20">
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Watch it read an invoice
+        </h2>
+        <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
+          Grab a sample PDF, drop it in, and see the fields come out. No setup — it runs in your
           browser.
         </p>
-        <Link href="/demo" className={`mt-6 ${buttonVariants({ size: "lg" })}`}>
-          Try the demo
+        <Link href="/demo" className={`mt-7 ${buttonVariants({ size: "lg" })}`}>
+          Run the demo
           <ArrowRight aria-hidden />
         </Link>
       </div>

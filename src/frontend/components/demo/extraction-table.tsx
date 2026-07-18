@@ -12,11 +12,14 @@ import { StatusBadge } from "./status-badge";
 import { formatCurrency, formatDate, formatConfidence, EM_DASH } from "@/lib/format";
 import type { RunRow } from "@/lib/types";
 
+const HEAD = "text-xs font-medium tracking-wide text-muted-foreground uppercase";
+const NUM = "text-right font-mono tabular-nums";
+
 export function ExtractionTable({ rows }: { rows: RunRow[] }) {
   if (rows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        No invoices yet. Download a sample above, then upload it to see the extracted fields.
+      <div className="rounded-lg bg-muted/50 px-6 py-10 text-center text-sm text-muted-foreground">
+        Upload a sample above and run it — the extracted fields will show up here.
       </div>
     );
   }
@@ -24,23 +27,15 @@ export function ExtractionTable({ rows }: { rows: RunRow[] }) {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead scope="col">File</TableHead>
-          <TableHead scope="col">Invoice #</TableHead>
-          <TableHead scope="col">Date</TableHead>
-          <TableHead scope="col" className="text-right">
-            Subtotal
-          </TableHead>
-          <TableHead scope="col" className="text-right">
-            Tax
-          </TableHead>
-          <TableHead scope="col" className="text-right">
-            Total
-          </TableHead>
-          <TableHead scope="col" className="text-right">
-            Confidence
-          </TableHead>
-          <TableHead scope="col">Status</TableHead>
+        <TableRow className="hover:bg-transparent">
+          <TableHead className={HEAD}>File</TableHead>
+          <TableHead className={HEAD}>Invoice #</TableHead>
+          <TableHead className={HEAD}>Date</TableHead>
+          <TableHead className={`${HEAD} text-right`}>Subtotal</TableHead>
+          <TableHead className={`${HEAD} text-right`}>Tax</TableHead>
+          <TableHead className={`${HEAD} text-right`}>Total</TableHead>
+          <TableHead className={`${HEAD} text-right`}>Confidence</TableHead>
+          <TableHead className={HEAD}>Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -49,18 +44,20 @@ export function ExtractionTable({ rows }: { rows: RunRow[] }) {
           return (
             <TableRow key={row.id}>
               <TableCell className="font-medium">{row.fileName}</TableCell>
-              <TableCell>{row.result?.invoiceNumber ?? EM_DASH}</TableCell>
-              <TableCell>{formatDate(row.result?.date ?? null)}</TableCell>
-              <TableCell className="text-right tabular-nums">
+              <TableCell className="font-mono">{row.result?.invoiceNumber ?? EM_DASH}</TableCell>
+              <TableCell className="font-mono tabular-nums">
+                {formatDate(row.result?.date ?? null)}
+              </TableCell>
+              <TableCell className={NUM}>
                 {formatCurrency(row.result?.subtotal ?? null, currency)}
               </TableCell>
-              <TableCell className="text-right tabular-nums">
+              <TableCell className={NUM}>
                 {formatCurrency(row.result?.tax ?? null, currency)}
               </TableCell>
-              <TableCell className="text-right font-medium tabular-nums">
+              <TableCell className={`${NUM} font-medium`}>
                 {formatCurrency(row.result?.total ?? null, currency)}
               </TableCell>
-              <TableCell className="text-right tabular-nums">
+              <TableCell className={`${NUM} text-muted-foreground`}>
                 {formatConfidence(row.result?.confidence ?? null)}
               </TableCell>
               <TableCell>

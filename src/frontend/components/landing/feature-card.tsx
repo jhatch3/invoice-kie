@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 interface FeatureCardProps {
   icon: LucideIcon;
@@ -7,16 +6,15 @@ interface FeatureCardProps {
   description: string;
 }
 
+// Borderless: separation comes from whitespace, not a box.
 export function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
   return (
-    <Card className="transition-all hover:-translate-y-0.5 hover:ring-primary/30">
-      <CardHeader>
-        <span className="mb-2 inline-flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-          <Icon className="size-5" aria-hidden />
-        </span>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-    </Card>
+    <div>
+      <span className="inline-flex size-9 items-center justify-center rounded-md bg-accent text-accent-foreground">
+        <Icon className="size-5" aria-hidden />
+      </span>
+      <h3 className="mt-4 font-medium tracking-tight">{title}</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{description}</p>
+    </div>
   );
 }

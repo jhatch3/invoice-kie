@@ -1,25 +1,29 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import type { RunStatus } from "@/lib/types";
 
-const MAP: Record<
-  RunStatus,
-  { label: string; variant: "outline" | "secondary" | "default" | "destructive" }
-> = {
-  idle: { label: "Idle", variant: "outline" },
-  running: { label: "Running", variant: "secondary" },
-  done: { label: "Done", variant: "default" },
-  error: { label: "Error", variant: "destructive" },
+// Muted semantic tints (tinted bg + same-hue text), not saturated solid fills.
+const MAP: Record<RunStatus, { label: string; cls: string }> = {
+  idle: { label: "Idle", cls: "bg-muted text-muted-foreground" },
+  running: { label: "Running", cls: "bg-primary/10 text-primary" },
+  done: { label: "Done", cls: "bg-success/10 text-success" },
+  error: { label: "Error", cls: "bg-destructive/10 text-destructive" },
 };
 
 export function StatusBadge({ status }: { status: RunStatus }) {
-  const { label, variant } = MAP[status];
+  const { label, cls } = MAP[status];
   return (
-    <Badge variant={variant} data-status={status}>
-      {status === "running" && <Loader2 className="animate-spin" aria-hidden />}
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
+        cls,
+      )}
+      data-status={status}
+    >
+      {status === "running" && <Loader2 className="size-3 animate-spin" aria-hidden />}
       {label}
-    </Badge>
+    </span>
   );
 }
