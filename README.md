@@ -78,7 +78,6 @@ data/
   cord/              git-ignored local data (raw/ processed/ samples/)
 src/backend/         Python: prep, train, eval, Qwen2-VL runner (phases 2-3)
 src/frontend/        Next.js demo + benchmark UI
-docs/superpowers/specs/2026-07-18-invoice-kie-cord-benchmark-design.md   design spec
 ```
 
 ## Frontend

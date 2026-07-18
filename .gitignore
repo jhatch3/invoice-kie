@@ -282,3 +282,7 @@ Thumbs.db
 # Re-include it despite the broad `lib/` rule above.
 !src/frontend/lib/
 !src/frontend/lib/**
+
+# Local-only tooling and working docs (kept on disk, not published to the repo)
+.claude/
+docs/superpowers/
