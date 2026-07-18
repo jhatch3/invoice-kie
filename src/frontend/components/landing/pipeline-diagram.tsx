@@ -10,13 +10,14 @@ const STAGES = [
 // A genuine four-step sequence, so numbered markers earn their place.
 export function PipelineDiagram() {
   return (
-    <section id="how-it-works" className="scroll-mt-20 border-t border-border/60 bg-muted/40">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-2xl font-semibold tracking-tight">How it works</h2>
+    <section id="how-it-works" className="scroll-mt-20 border-t border-border/60">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <p className="text-sm font-medium text-primary">Pipeline</p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight">How it works</h2>
         <p className="mt-2 max-w-xl text-muted-foreground">
-          Every PDF runs the same four stages, end to end.
+          Every PDF runs the same four stages, start to finish.
         </p>
-        <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {STAGES.map((stage, i) => (
             <li key={stage.label}>
               <span className="font-mono text-xs font-medium text-primary">

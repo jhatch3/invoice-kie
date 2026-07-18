@@ -14,7 +14,7 @@ export function Hero() {
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
             invoice-kie pulls the total, tax, subtotal, date, and invoice number straight from a
-            PDF with a fine-tuned LayoutLMv3 model — and checks itself against a zero-shot
+            PDF using a fine-tuned LayoutLMv3 model, then checks itself against a zero-shot
             vision-language baseline.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">

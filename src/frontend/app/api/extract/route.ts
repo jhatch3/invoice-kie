@@ -1,7 +1,7 @@
 import { resultFor, genericResult } from "@/lib/samples";
 
-// Frontend-only MOCK of the extraction pipeline. This is NOT the real backend —
-// it returns fixture data so the demo works end-to-end before FastAPI exists.
+// Frontend-only MOCK of the extraction pipeline. This is NOT the real backend.
+// It returns fixture data so the demo works end-to-end before FastAPI exists.
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

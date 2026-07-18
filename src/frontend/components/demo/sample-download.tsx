@@ -1,7 +1,7 @@
 import { Download } from "lucide-react";
 import { samples } from "@/lib/samples";
 
-// Borderless rows — hover surface instead of an outlined button box.
+// Borderless rows: hover surface instead of an outlined button box.
 export function SampleDownload() {
   return (
     <ul className="space-y-1">

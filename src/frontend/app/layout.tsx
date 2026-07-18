@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "invoice-kie — invoice field extraction",
+  title: "invoice-kie: invoice field extraction",
   description:
     "Extract the total, tax, subtotal, date, and invoice number from invoice PDFs with a layout-aware model.",
 };

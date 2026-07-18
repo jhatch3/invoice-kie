@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { StatusBadge } from "./status-badge";
-import { formatCurrency, formatDate, formatConfidence, EM_DASH } from "@/lib/format";
+import { formatCurrency, formatDate, formatConfidence, EMPTY } from "@/lib/format";
 import type { RunRow } from "@/lib/types";
 
 const HEAD = "text-xs font-medium tracking-wide text-muted-foreground uppercase";
@@ -19,7 +19,7 @@ export function ExtractionTable({ rows }: { rows: RunRow[] }) {
   if (rows.length === 0) {
     return (
       <div className="rounded-lg bg-muted/50 px-6 py-10 text-center text-sm text-muted-foreground">
-        Upload a sample above and run it — the extracted fields will show up here.
+        Upload a sample above and run it. The extracted fields will show up here.
       </div>
     );
   }
@@ -44,7 +44,7 @@ export function ExtractionTable({ rows }: { rows: RunRow[] }) {
           return (
             <TableRow key={row.id}>
               <TableCell className="font-medium">{row.fileName}</TableCell>
-              <TableCell className="font-mono">{row.result?.invoiceNumber ?? EM_DASH}</TableCell>
+              <TableCell className="font-mono">{row.result?.invoiceNumber ?? EMPTY}</TableCell>
               <TableCell className="font-mono tabular-nums">
                 {formatDate(row.result?.date ?? null)}
               </TableCell>

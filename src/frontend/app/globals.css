@@ -36,10 +36,10 @@
 }
 
 /*
-  invoice-kie tokens — clean/minimal SaaS.
+  invoice-kie tokens for a clean, minimal SaaS look.
   Accent: signal teal (a document-extraction tool, not default blue/violet).
   Neutrals: cool slate with a slight temperature (never pure gray).
-  Light by default — no unrequested dark mode.
+  Light by default, with no unrequested dark mode.
 */
 :root {
   --background: oklch(0.994 0.003 240);

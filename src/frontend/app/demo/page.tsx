@@ -3,7 +3,7 @@ import { SampleDownload } from "@/components/demo/sample-download";
 import { ExtractionWorkbench } from "@/components/demo/extraction-workbench";
 
 export const metadata: Metadata = {
-  title: "Demo — invoice-kie",
+  title: "invoice-kie demo",
   description: "Download a sample invoice, upload it, and run the extraction pipeline.",
 };
 
@@ -13,13 +13,13 @@ export default function DemoPage() {
       <h1 className="text-3xl font-semibold tracking-tight">Run the pipeline</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">
         Download a sample invoice, upload it back, and run it. Extraction is mocked in your browser
-        for this demo — the fields mirror what the trained model will return.
+        for this demo. The fields mirror what the trained model will return.
       </p>
 
       <div className="mt-10 flex flex-col gap-10">
         <section aria-labelledby="download-heading">
           <h2 id="download-heading" className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Step 1 — Download a test invoice
+            Step 1: Download a test invoice
           </h2>
           <div className="mt-3 max-w-md">
             <SampleDownload />
@@ -28,7 +28,7 @@ export default function DemoPage() {
 
         <section aria-labelledby="run-heading">
           <h2 id="run-heading" className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Step 2 — Upload and run
+            Step 2: Upload and run
           </h2>
           <div className="mt-3">
             <ExtractionWorkbench />
