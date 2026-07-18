@@ -12,12 +12,12 @@ const STAGES = [
   {
     n: "03",
     title: "Token tagging",
-    desc: "A fine-tuned head predicts BIO labels over five invoice fields on CORD + DocILE.",
+    desc: "A fine-tuned head predicts BIO labels over the CORD header fields and line items.",
   },
   {
     n: "04",
     title: "Normalize",
-    desc: "A post-processor resolves duplicates, parses amounts to numerics, and returns ISO-8601 dates.",
+    desc: "A post-processor resolves duplicates, parses amounts to numbers, and emits the target JSON.",
   },
 ] as const;
 

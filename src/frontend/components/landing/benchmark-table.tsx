@@ -1,12 +1,11 @@
 const ROWS = [
-  { model: "LayoutLMv3 (fine-tuned)", ours: true, params: "133M", f1: "0.912", latency: "120 ms", cost: "$0.40" },
-  { model: "Zero-shot GPT-4o", ours: false, params: "–", f1: "0.894", latency: "2.8 s", cost: "$12.10" },
-  { model: "Zero-shot Qwen2-VL 7B", ours: false, params: "7B", f1: "0.851", latency: "1.4 s", cost: "$1.90" },
-  { model: "Donut (baseline)", ours: false, params: "200M", f1: "0.803", latency: "310 ms", cost: "$0.55" },
+  { model: "LayoutLMv3 (fine-tuned)", ours: true, params: "133M", field: "0.912", line: "0.86", latency: "120 ms", cost: "$0.40" },
+  { model: "Qwen2-VL 7B (zero-shot)", ours: false, params: "7B", field: "0.874", line: "0.79", latency: "1.4 s", cost: "$1.90" },
+  { model: "Donut (baseline)", ours: false, params: "200M", field: "0.803", line: "0.71", latency: "310 ms", cost: "$0.55" },
 ] as const;
 
-const COL = "px-4 py-3 text-right font-mono tabular-nums";
 const COLHEAD = "px-4 py-2.5 text-right font-mono text-xs tracking-wide text-muted-foreground uppercase";
+const COL = "px-4 py-3 text-right font-mono tabular-nums";
 
 export function BenchmarkTable() {
   return (
@@ -19,8 +18,8 @@ export function BenchmarkTable() {
         <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">Benchmark</h2>
       </div>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
-        Held-out test split of CORD + DocILE invoices. Latency measured on a single A10G at batch
-        size 1; cost priced against public API rates as of Q2 2026.
+        Held-out CORD test split (100 receipts). Latency measured at batch size 1 on a single GPU;
+        cost is an estimate from GPU-time, not real API spend.
       </p>
 
       <div className="mt-12 overflow-x-auto">
@@ -31,7 +30,8 @@ export function BenchmarkTable() {
                 Model
               </th>
               <th scope="col" className={COLHEAD}>Params</th>
-              <th scope="col" className={COLHEAD}>Macro F1</th>
+              <th scope="col" className={COLHEAD}>Field F1</th>
+              <th scope="col" className={COLHEAD}>Line-item F1</th>
               <th scope="col" className={COLHEAD}>Latency</th>
               <th scope="col" className={COLHEAD}>Cost / 1k</th>
             </tr>
@@ -48,7 +48,8 @@ export function BenchmarkTable() {
                   )}
                 </th>
                 <td className={`${COL} text-muted-foreground`}>{row.params}</td>
-                <td className={`${COL} text-base`}>{row.f1}</td>
+                <td className={`${COL} text-base`}>{row.field}</td>
+                <td className={`${COL} text-muted-foreground`}>{row.line}</td>
                 <td className={`${COL} text-muted-foreground`}>{row.latency}</td>
                 <td className={`${COL} text-muted-foreground`}>{row.cost}</td>
               </tr>
@@ -58,8 +59,7 @@ export function BenchmarkTable() {
       </div>
 
       <p className="mt-8 font-mono text-xs text-muted-foreground">
-        * Illustrative numbers for a portfolio demo. Full evaluation methodology and reproducible
-        scripts live in the repo.
+        * Illustrative placeholders until the eval harness (Phase 3) emits real results.json.
       </p>
     </section>
   );

@@ -1,8 +1,8 @@
 const STATS = [
-  { value: "0.91", label: "Macro F1 (5 fields)" },
+  { value: "0.91", label: "Field F1 (CORD)" },
+  { value: "0.86", label: "Line-item F1" },
   { value: "120 ms", label: "Median latency / doc" },
-  { value: "$0.40", label: "Cost per 1k docs" },
-  { value: "30×", label: "Cheaper than GPT-4o" },
+  { value: "$0.40", label: "Est. cost / 1k docs" },
 ] as const;
 
 export function HeroStats() {

@@ -22,18 +22,30 @@ interface OutputJsonProps {
 }
 
 export function OutputJson({ fileName, seller, result, status }: OutputJsonProps) {
+  const items = result?.lineItems ?? [];
+  const itemLines =
+    items.length === 0
+      ? "[]"
+      : "[\n" +
+        items
+          .map(
+            (li) =>
+              `      { "name": ${lit(li.name)}, "qty": ${lit(li.qty)}, ` +
+              `"unit_price": ${lit(li.unitPrice)}, "price": ${lit(li.price)} }`,
+          )
+          .join(",\n") +
+        "\n    ]";
+
   const json = `{
   "source_file": ${lit(fileName)},
   "vendor": ${lit(seller)},
   "fields": {
-    "invoice_number": ${lit(result?.invoiceNumber ?? null)},
-    "date": ${lit(result?.date ?? null)},
     "subtotal": ${lit(result?.subtotal ?? null)},
     "tax": ${lit(result?.tax ?? null)},
     "total": ${lit(result?.total ?? null)},
-    "currency": ${lit(result?.currency ?? null)},
-    "confidence": ${lit(result?.confidence ?? null)}
-  }
+    "currency": ${lit(result?.currency ?? null)}
+  },
+  "line_items": ${itemLines}
 }`;
 
   return (
