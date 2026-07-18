@@ -1,37 +1,41 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { HeroPreview } from "./hero-preview";
+import { HeroStats } from "./hero-stats";
 
 export function Hero() {
   return (
-    <section className="border-b border-border/60">
-      <div className="grid items-center gap-14 px-6 py-20 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-16 lg:py-28">
-        <div>
-          <p className="text-sm font-medium text-primary">Invoice field extraction</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            Read every field off an invoice PDF, automatically.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            invoice-kie pulls the total, tax, subtotal, date, and invoice number straight from a
-            PDF using a fine-tuned LayoutLMv3 model, then checks itself against a zero-shot
-            vision-language baseline.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="/demo" className={buttonVariants({ size: "lg" })}>
-              Run the demo
-              <ArrowRight aria-hidden />
-            </Link>
-            <Link
-              href="/#how-it-works"
-              className={buttonVariants({ variant: "ghost", size: "lg" })}
-            >
-              See how it works
-            </Link>
-          </div>
-        </div>
+    <section
+      id="top"
+      className="flex min-h-[calc(100svh-3.5rem)] flex-col justify-center border-b border-border px-6 py-20 sm:px-10 lg:px-16"
+    >
+      <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+        <span className="h-px w-8 bg-border" aria-hidden />
+        Key information extraction · PDFs → JSON
+      </div>
 
-        <HeroPreview />
+      <h1 className="mt-8 max-w-4xl font-display text-5xl font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl lg:leading-[0.98]">
+        A fine-tuned LayoutLMv3 pipeline that reads invoices at a fraction of the cost of a VLM.
+      </h1>
+
+      <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
+        invoice-kie extracts total, tax, subtotal, date, and invoice number from invoice PDFs, and
+        benchmarks the fine-tuned model against zero-shot GPT-4o on accuracy, latency, and cost per
+        thousand documents.
+      </p>
+
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <Link href="/#try" className={buttonVariants({ size: "lg" })}>
+          Try the pipeline
+          <ArrowRight aria-hidden />
+        </Link>
+        <Link href="/#benchmark" className={buttonVariants({ variant: "outline", size: "lg" })}>
+          See the numbers
+        </Link>
+      </div>
+
+      <div className="mt-16">
+        <HeroStats />
       </div>
     </section>
   );

@@ -1,54 +1,66 @@
-import { EMPTY } from "@/lib/format";
+const ROWS = [
+  { model: "LayoutLMv3 (fine-tuned)", ours: true, params: "133M", f1: "0.912", latency: "120 ms", cost: "$0.40" },
+  { model: "Zero-shot GPT-4o", ours: false, params: "–", f1: "0.894", latency: "2.8 s", cost: "$12.10" },
+  { model: "Zero-shot Qwen2-VL 7B", ours: false, params: "7B", f1: "0.851", latency: "1.4 s", cost: "$1.90" },
+  { model: "Donut (baseline)", ours: false, params: "200M", f1: "0.803", latency: "310 ms", cost: "$0.55" },
+] as const;
 
-const ROWS = [{ model: "LayoutLMv3 (fine-tuned)" }, { model: "Zero-shot VLM" }] as const;
-const COLUMNS = ["Macro F1", "Latency", "Cost / 1k docs"] as const;
+const COL = "px-4 py-3 text-right font-mono tabular-nums";
+const COLHEAD = "px-4 py-2.5 text-right font-mono text-xs tracking-wide text-muted-foreground uppercase";
 
-// Blank on purpose. Real numbers land once the model is trained.
 export function BenchmarkTable() {
   return (
-    <section id="benchmarks" className="scroll-mt-20 border-t border-border/60 bg-muted/40">
-      <div className="px-6 py-20 sm:px-10 lg:px-16">
-        <p className="text-sm font-medium text-primary">Evaluation</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">Benchmarks</h2>
-        <p className="mt-2 max-w-xl text-muted-foreground">
-          The table fills in once the model is trained and scored on the public CORD and DocILE
-          datasets. It stays empty until those numbers are real.
-        </p>
-
-        <div className="mt-8 max-w-2xl overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                <th scope="col" className="py-2.5 pr-4 text-left">
-                  Model
-                </th>
-                {COLUMNS.map((col) => (
-                  <th key={col} scope="col" className="px-4 py-2.5 text-right">
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/70">
-              {ROWS.map((row) => (
-                <tr key={row.model}>
-                  <th scope="row" className="py-3 pr-4 text-left font-medium">
-                    {row.model}
-                  </th>
-                  {COLUMNS.map((col) => (
-                    <td
-                      key={col}
-                      className="px-4 py-3 text-right font-mono text-muted-foreground/70"
-                    >
-                      {EMPTY}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <section
+      id="benchmark"
+      className="flex min-h-[100svh] scroll-mt-14 flex-col justify-center border-b border-border px-6 py-20 sm:px-10 lg:px-16"
+    >
+      <div className="flex items-baseline gap-4">
+        <span className="font-mono text-xs text-muted-foreground">§ 02</span>
+        <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">Benchmark</h2>
       </div>
+      <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
+        Held-out test split of CORD + DocILE invoices. Latency measured on a single A10G at batch
+        size 1; cost priced against public API rates as of Q2 2026.
+      </p>
+
+      <div className="mt-12 overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-foreground/25">
+              <th scope="col" className="px-4 py-2.5 text-left font-mono text-xs tracking-wide text-muted-foreground uppercase">
+                Model
+              </th>
+              <th scope="col" className={COLHEAD}>Params</th>
+              <th scope="col" className={COLHEAD}>Macro F1</th>
+              <th scope="col" className={COLHEAD}>Latency</th>
+              <th scope="col" className={COLHEAD}>Cost / 1k</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {ROWS.map((row) => (
+              <tr key={row.model} className={row.ours ? "bg-muted/60" : undefined}>
+                <th scope="row" className="px-4 py-4 text-left font-medium">
+                  {row.model}
+                  {row.ours && (
+                    <span className="ml-2 font-mono text-xs tracking-wide text-muted-foreground uppercase">
+                      ours
+                    </span>
+                  )}
+                </th>
+                <td className={`${COL} text-muted-foreground`}>{row.params}</td>
+                <td className={`${COL} text-base`}>{row.f1}</td>
+                <td className={`${COL} text-muted-foreground`}>{row.latency}</td>
+                <td className={`${COL} text-muted-foreground`}>{row.cost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="mt-8 font-mono text-xs text-muted-foreground">
+        * Illustrative numbers for a portfolio demo. Full evaluation methodology and reproducible
+        scripts live in the repo.
+      </p>
     </section>
   );
 }

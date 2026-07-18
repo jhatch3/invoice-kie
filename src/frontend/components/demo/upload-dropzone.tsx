@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ChangeEvent, type DragEvent } from "react";
-import { UploadCloud } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function isPdf(file: File): boolean {
@@ -24,7 +23,7 @@ export function UploadDropzone({ onFile }: { onFile: (file: File) => void }) {
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     handle(e.target.files?.[0]);
-    e.target.value = ""; // allow re-selecting the same file
+    e.target.value = "";
   }
 
   function onDrop(e: DragEvent<HTMLLabelElement>) {
@@ -37,8 +36,8 @@ export function UploadDropzone({ onFile }: { onFile: (file: File) => void }) {
     <div>
       <label
         className={cn(
-          "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-muted/30 p-8 text-center text-sm transition-colors hover:border-primary/60 focus-within:ring-3 focus-within:ring-ring/50",
-          over && "border-primary bg-muted/60",
+          "flex cursor-pointer items-center justify-center gap-2 border border-dashed border-border px-4 py-5 text-center font-mono text-xs tracking-wide text-muted-foreground uppercase transition-colors hover:border-foreground/50 focus-within:border-foreground",
+          over && "border-foreground bg-muted/50",
         )}
         onDragOver={(e) => {
           e.preventDefault();
@@ -50,11 +49,7 @@ export function UploadDropzone({ onFile }: { onFile: (file: File) => void }) {
         }}
         onDrop={onDrop}
       >
-        <UploadCloud className="size-6 text-muted-foreground" aria-hidden />
-        <span>
-          Drag a PDF here, or <span className="font-medium text-primary">browse</span>
-        </span>
-        <span className="text-xs text-muted-foreground">PDF files only</span>
+        or drop your own PDF
         <input
           type="file"
           accept="application/pdf,.pdf"
