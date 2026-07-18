@@ -1,7 +1,12 @@
-# Invoice-kie Frontend Mockup — Design
+# Invoice-kie Frontend Mockup — Design (Vue) — SUPERSEDED
+
+> **SUPERSEDED 2026-07-18** by
+> [`2026-07-18-invoice-frontend-mockup-nextjs-design.md`](2026-07-18-invoice-frontend-mockup-nextjs-design.md).
+> The project pivoted from Vue to Next.js. The UX design below still holds; the
+> framework/plumbing does not. Kept for history.
 
 **Date:** 2026-07-18
-**Status:** Approved (brainstorming)
+**Status:** Superseded (pivoted to Next.js)
 **Stack:** Vue 3 + Vite + Pinia + vue-router + TypeScript (existing `src/frontend/` scaffold)
 
 ## Goal

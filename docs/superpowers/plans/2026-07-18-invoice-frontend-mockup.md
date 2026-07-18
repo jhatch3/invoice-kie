@@ -1,4 +1,8 @@
-# Invoice-kie Frontend Mockup Implementation Plan
+# Invoice-kie Frontend Mockup Implementation Plan (Vue) — SUPERSEDED
+
+> **SUPERSEDED 2026-07-18** by
+> [`2026-07-18-invoice-frontend-mockup-nextjs.md`](2026-07-18-invoice-frontend-mockup-nextjs.md).
+> The project pivoted from Vue to Next.js. This Vue plan was never executed. Kept for history.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
