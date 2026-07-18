@@ -1,33 +1,26 @@
-# invoice-kie — Python backend dependencies
-# Fine-tunes LayoutLMv3 for invoice field extraction and benchmarks vs. a zero-shot VLM.
+# invoice-kie — Python dependencies for the CORD document-KIE benchmark.
 # Install with:  pip install -r requirements.txt
 
-# --- Core ML / modeling ---
+# --- Data (Phase 1: load + store CORD locally) ---
+datasets>=2.18
+huggingface_hub>=0.23
+pandas>=2.2
+pyarrow>=15
+Pillow>=10.0
+
+# --- Modeling (Phase 2: fine-tune LayoutLMv3) ---
 torch>=2.2
 transformers>=4.40
-datasets>=2.18
 accelerate>=0.29
-seqeval>=1.2.2            # token-classification (F1) metrics
+seqeval>=1.2.2          # entity-level F1 for token classification
 evaluate>=0.4
 
-# --- OCR (tokens + layout) ---
-pytesseract>=0.3.10       # requires system Tesseract: apt-get install tesseract-ocr
-# paddleocr>=2.7          # optional alternative OCR backend
-# paddlepaddle>=2.6
+# --- Zero-shot VLM baseline (Phase 3: Qwen2-VL) ---
+qwen-vl-utils>=0.0.8
 
-# --- PDF / image handling ---
-pdf2image>=1.17           # requires system poppler
-Pillow>=10.0
-pypdfium2>=4.28
-
-# --- Zero-shot VLM benchmark (Qwen2-VL / GPT-4o) ---
-openai>=1.30              # GPT-4o baseline
-# qwen-vl-utils>=0.0.8    # uncomment if running Qwen2-VL locally
-
-# --- Data / utils ---
-numpy>=1.26
-pandas>=2.2
-python-dotenv>=1.0        # load API keys from .env
+# --- OCR (only for running the pipeline on new PDFs; CORD ships word boxes) ---
+# pytesseract>=0.3.10   # requires system Tesseract
+# pdf2image>=1.17       # requires system poppler
 
 # --- Dev / testing ---
 pytest>=8.0

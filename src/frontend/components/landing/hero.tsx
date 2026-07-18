@@ -11,17 +11,17 @@ export function Hero() {
     >
       <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span className="h-px w-8 bg-border" aria-hidden />
-        Key information extraction · PDFs → JSON
+        Key information extraction · receipts → JSON
       </div>
 
       <h1 className="mt-8 max-w-4xl font-display text-5xl font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl lg:leading-[0.98]">
-        A fine-tuned LayoutLMv3 pipeline that reads invoices at a fraction of the cost of a VLM.
+        A fine-tuned LayoutLMv3 pipeline that reads documents at a fraction of the cost of a VLM.
       </h1>
 
       <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-        invoice-kie extracts total, tax, subtotal, date, and invoice number from invoice PDFs, and
-        benchmarks the fine-tuned model against zero-shot GPT-4o on accuracy, latency, and cost per
-        thousand documents.
+        invoice-kie extracts subtotal, tax, total, and line items from receipt documents (CORD),
+        and benchmarks the fine-tuned model against a zero-shot Qwen2-VL baseline on accuracy,
+        latency, and estimated cost. The method transfers to invoices.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center gap-3">

@@ -1,0 +1,2 @@
+# Local dataset cache — do not commit (multi-GB). Regenerate with `python data/load_data.py`.
+cord/

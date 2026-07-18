@@ -45,8 +45,8 @@ async function buildPdf(sample) {
   });
   y -= 22;
   for (const item of sample.lineItems) {
-    line(item.description);
-    line(money(item.amount, sample.currency), { x: 430 });
+    line(item.name);
+    line(money(item.price, sample.currency), { x: 430 });
     y -= 20;
   }
   y -= 10;

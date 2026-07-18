@@ -1,52 +1,95 @@
-<div align="center">
-
 # invoice-kie
 
-**Extracts the total, tax, subtotal, date, and invoice number from invoice PDFs.**
+A reproducible **key-information-extraction (KIE)** benchmark on public receipt documents.
+Fine-tune **LayoutLMv3** for field + line-item extraction and compare it head-to-head against a
+**zero-shot open vision-language model (Qwen2-VL)** on accuracy, latency, and estimated cost.
 
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
+Everything runs on public data with open weights: **no paid APIs, no gated datasets.** The work
+is framed honestly as document/receipt KIE that transfers to invoices, not a claim of
+state-of-the-art invoice extraction.
 
-</div>
+## Dataset
 
-<!-- Best practice: lead with a visual. Replace with a real screenshot/GIF of the
-     demo turning a PDF into JSON — this is the single highest-impact addition. -->
-<p align="center">
-  <img src="docs/demo.gif" alt="Invoice → extracted fields demo" width="600">
-</p>
+**CORD v2** — [`naver-clova-ix/cord-v2`](https://huggingface.co/datasets/naver-clova-ix/cord-v2)
+(Hugging Face, Parquet, CC-BY-4.0): 800 train / 100 validation / 100 test receipts, each with an
+`image` and a `ground_truth` JSON parse.
 
-## What it does
+Every system in the benchmark produces the same target schema:
 
-Fine-tunes a layout-aware transformer (**LayoutLMv3**) to read key fields off invoice PDFs, and benchmarks it against a zero-shot vision-language model (Qwen2-VL / GPT-4o) to compare accuracy, latency, and cost.
-
-**Result:** the fine-tuned model matched the VLM's accuracy at a fraction of the latency and cost per document. _(add your numbers)_
-
-| Model | Macro F1 | Latency | Cost / 1k docs |
-|-------|:--------:|:-------:|:--------------:|
-| LayoutLMv3 (fine-tuned) | — | — | — |
-| Zero-shot VLM | — | — | — |
-
-## How it works
-
-`PDF → OCR (tokens + layout) → LayoutLMv3 token tagging → normalized JSON`
-
-Benchmarked on **CORD** and **DocILE**, public invoice datasets.
-
-## Quickstart
-
-```bash
-pip install -e .
-pytest
-python -m invoice_kie.train --dataset cord
+```json
+{
+  "subtotal": "string|null",
+  "tax": "string|null",
+  "total": "string|null",
+  "line_items": [ { "name": "...", "qty": "...", "unit_price": "...", "price": "..." } ]
+}
 ```
 
-Requires Tesseract OCR (`apt-get install tesseract-ocr`).
+Header fields come from `gt_parse.sub_total` / `gt_parse.total`; line items from `gt_parse.menu`.
 
-## Tech stack
+### Load and store the data locally
 
-Python · PyTorch · HuggingFace Transformers · LayoutLMv3 · Tesseract/PaddleOCR
+```sh
+pip install -r requirements.txt
+python data/load_data.py
+```
+
+This downloads all splits and writes, under `data/cord/` (git-ignored):
+
+- `raw/{split}.parquet` — the full split as downloaded (image + ground_truth)
+- `processed/{split}.jsonl` — the target schema per document
+- `samples/*.png` — a few decoded receipts for a sanity check
+
+## Systems compared
+
+1. **LayoutLMv3 (fine-tuned)** — token classification on CORD; decode token labels into the
+   target JSON.
+2. **Qwen2-VL (zero-shot)** — prompt the receipt image to emit the target JSON directly. Open
+   weights, run locally.
+
+Both consume the same test split and emit the same schema, so scores are comparable.
+
+## Metrics
+
+| Metric | Definition |
+|--------|------------|
+| **Field F1** | Per-field and macro over `subtotal / tax / total`, exact match after normalization. |
+| **Line-item F1** | Greedily match predicted rows to gold, then score `name / qty / unit_price / price`. |
+| **Latency** | Median ms/doc, batch size 1, one fixed GPU. |
+| **Cost / 1k docs** | Estimate: latency times an assumed GPU hourly rate (no real spend). |
+
+Evaluation is seeded and run on the CORD **test** split (100 receipts).
+
+## Status
+
+- [x] **Phase 1 — Data:** load + store CORD locally, target-schema extraction (`data/load_data.py`).
+- [ ] **Phase 2 — Prep + train:** CORD to LayoutLMv3 token labels; fine-tune; field/line-item decoder.
+- [ ] **Phase 3 — Baseline + eval:** Qwen2-VL zero-shot runner; shared metrics to `results.json`.
+- [ ] **Phase 4 — Wire-up:** frontend Benchmark section reflects real `results.json`.
+- [ ] **Future:** DocILE (real invoices) as a follow-on dataset.
+
+Benchmark numbers shown in the frontend are **illustrative placeholders** until Phase 3 lands.
+
+## Repository layout
+
+```
+data/
+  load_data.py       download + store CORD locally
+  cord/              git-ignored local data (raw/ processed/ samples/)
+src/backend/         Python: prep, train, eval, Qwen2-VL runner (phases 2-3)
+src/frontend/        Next.js demo + benchmark UI
+```
+
+## Frontend
+
+A Next.js (App Router) demo that shows the pipeline stages and the benchmark table. From
+`src/frontend/`:
+
+```sh
+npm install
+npm run dev      # http://localhost:3000
+```
 
 ## License
 
-MIT · Built by [Justin Hatch](https://github.com/jhatch3)
+Code: MIT. CORD data: CC-BY-4.0 (see the dataset card).

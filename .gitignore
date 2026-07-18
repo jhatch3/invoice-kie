@@ -277,3 +277,12 @@ coverage/
 # OS cruft
 .DS_Store
 Thumbs.db
+
+# The Next.js frontend has its own lib/ (source, not a Python build dir).
+# Re-include it despite the broad `lib/` rule above.
+!src/frontend/lib/
+!src/frontend/lib/**
+
+# Local-only tooling and working docs (kept on disk, not published to the repo)
+.claude/
+docs/superpowers/

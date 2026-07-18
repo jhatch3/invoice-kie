@@ -1,0 +1,30 @@
+[
+  {
+    "fileName": "acme-invoice.pdf",
+    "seller": "Acme Industrial Supply Co.",
+    "blurb": "Industrial supply, 2 line items",
+    "currency": "USD",
+    "lineItems": [
+      { "name": "Widget assembly", "qty": 40, "unit_price": 22.0, "price": 880.0 },
+      { "name": "Onsite calibration", "qty": 1, "unit_price": 360.0, "price": 360.0 }
+    ],
+    "subtotal": 1240.0,
+    "tax": 99.2,
+    "total": 1339.2,
+    "confidence": 0.97
+  },
+  {
+    "fileName": "globex-invoice.pdf",
+    "seller": "Globex Cloud Services LLC",
+    "blurb": "Cloud services, 2 line items",
+    "currency": "USD",
+    "lineItems": [
+      { "name": "Cloud hosting (May)", "qty": 1, "unit_price": 500.0, "price": 500.0 },
+      { "name": "Support retainer", "qty": 1, "unit_price": 250.0, "price": 250.0 }
+    ],
+    "subtotal": 750.0,
+    "tax": 60.0,
+    "total": 810.0,
+    "confidence": 0.91
+  }
+]
