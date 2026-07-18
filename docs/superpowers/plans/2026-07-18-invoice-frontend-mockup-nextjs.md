@@ -1,4 +1,13 @@
-# Invoice-kie Frontend Mockup Implementation Plan (Next.js)
+# Invoice-kie Frontend Mockup Implementation Plan (Next.js) — SUPERSEDED
+
+> **SUPERSEDED 2026-07-18.** Scope expanded to a full-stack (Next.js + FastAPI) app. This
+> plan's Next Route Handler stub, hand-written `extractClient`, and CSS Modules are replaced by
+> a FastAPI `/extract` endpoint, an OpenAPI-generated typed client, and Tailwind/shadcn. The
+> active design is
+> [`../specs/2026-07-18-invoice-frontend-mockup-nextjs-design.md`](../specs/2026-07-18-invoice-frontend-mockup-nextjs-design.md)
+> (full-stack, phased). A detailed Phase 1 plan will be written from that spec's task outline.
+> Reusable parts of this plan (types, formatters, component structure, sample data, tests) carry
+> over. This plan was never executed. Kept for history.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
