@@ -286,3 +286,6 @@ Thumbs.db
 # Local-only tooling and working docs (kept on disk, not published to the repo)
 .claude/
 docs/superpowers/
+
+# Trained model artifacts (regenerate with `python -m app.train`)
+models/

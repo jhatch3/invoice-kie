@@ -8,6 +8,16 @@ pydantic>=2.7
 pydantic-settings>=2.3
 python-multipart>=0.0.9   # multipart/form-data file uploads
 
+# --- Modeling (Phase 2: train + serve LayoutLMv3) ---
+# For GPU training install a CUDA torch build from https://pytorch.org (this pin is CPU-ok).
+torch>=2.2
+transformers>=4.40
+datasets>=2.18
+evaluate>=0.4
+seqeval>=1.2.2            # entity-level F1 for token classification
+pillow>=10.0
+# pytesseract>=0.3.10     # production OCR front-end (needs system Tesseract) — Phase 2c
+
 # --- Dev / testing ---
 httpx>=0.27               # async test client (ASGITransport)
 pytest>=8.0
