@@ -1,12 +1,9 @@
 """Build an encoded HF Dataset from CORD for LayoutLMv3 token classification.
 
-Reads the local CORD parquet (image + ground_truth), turns each doc into words / boxes / BIO
-label ids via `cord_to_features`, then runs the LayoutLMv3Processor (apply_ocr=False) to produce
-input_ids / attention_mask / bbox / pixel_values / labels.
-
-Encoding happens through `Dataset.map(batched=...)` so only a few images are decoded at a time and
-the encoded features stream to Arrow on disk — full-resolution receipts are never all held in RAM
-at once.
+The CORD parquet is read as a memory-mapped HF Dataset and everything — parsing ground truth,
+decoding images, running LayoutLMv3Processor (apply_ocr=False) — happens inside a streaming
+`.map(batched=...)`. Nothing is materialized in RAM for the whole split, so this scales to the
+full 800-doc train split (the earlier dict-based build OOM'd on fingerprint pickling).
 """
 
 from __future__ import annotations
@@ -15,23 +12,21 @@ import io
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
 from datasets import Dataset
-from PIL import Image
+from PIL import Image as PILImage
 
 from app.extraction.preprocess import cord_to_features
 
 
-def _image_bytes(cell: Any) -> bytes:
-    """Extract the raw (compressed) image bytes from a parquet image cell."""
-    if isinstance(cell, dict) and "bytes" in cell:
-        return cell["bytes"]
+def _to_pil(cell: Any) -> PILImage.Image:
+    """Decode a parquet image cell (PIL image, or a {bytes,...} struct) to RGB."""
+    if isinstance(cell, PILImage.Image):
+        return cell.convert("RGB")
+    if isinstance(cell, dict) and cell.get("bytes"):
+        return PILImage.open(io.BytesIO(cell["bytes"])).convert("RGB")
     if isinstance(cell, (bytes, bytearray)):
-        return bytes(cell)
-    # Already a PIL image — re-encode to PNG bytes.
-    buf = io.BytesIO()
-    cell.save(buf, format="PNG")
-    return buf.getvalue()
+        return PILImage.open(io.BytesIO(cell)).convert("RGB")
+    raise TypeError(f"Unsupported image cell type: {type(cell)!r}")
 
 
 def build_dataset(
@@ -46,35 +41,29 @@ def build_dataset(
 
     Peak memory is bounded to ~`batch_size` decoded images regardless of split size.
     """
-    df = pd.read_parquet(data_dir / f"{split}.parquet")
+    ds = Dataset.from_parquet(str(data_dir / f"{split}.parquet"))
     if limit is not None:
-        df = df.head(limit)
+        ds = ds.select(range(min(limit, len(ds))))
 
-    # Keep only compressed bytes + lightweight annotations in memory.
-    rows: dict[str, list] = {"image_bytes": [], "words": [], "boxes": [], "labels": []}
-    for _, row in df.iterrows():
-        feats = cord_to_features(row["ground_truth"])
-        if not feats["words"]:
-            continue
-        rows["image_bytes"].append(_image_bytes(row["image"]))
-        rows["words"].append(feats["words"])
-        rows["boxes"].append(feats["boxes"])
-        rows["labels"].append(feats["labels"])
-
-    base = Dataset.from_dict(rows)
+    # Drop docs with no labelled words so the processor never sees empty input.
+    ds = ds.filter(
+        lambda gt: bool(cord_to_features(gt)["words"]),
+        input_columns=["ground_truth"],
+    )
 
     def encode(batch: dict[str, list]) -> dict:
-        images = [Image.open(io.BytesIO(b)).convert("RGB") for b in batch["image_bytes"]]
+        feats = [cord_to_features(gt) for gt in batch["ground_truth"]]
+        images = [_to_pil(cell) for cell in batch["image"]]
         return processor(
             images,
-            batch["words"],
-            boxes=batch["boxes"],
-            word_labels=batch["labels"],
+            [f["words"] for f in feats],
+            boxes=[f["boxes"] for f in feats],
+            word_labels=[f["labels"] for f in feats],
             truncation=True,
             padding="max_length",
             max_length=max_length,
         )
 
-    ds = base.map(encode, batched=True, batch_size=batch_size, remove_columns=base.column_names)
-    ds.set_format("torch")
-    return ds
+    encoded = ds.map(encode, batched=True, batch_size=batch_size, remove_columns=ds.column_names)
+    encoded.set_format("torch")
+    return encoded
