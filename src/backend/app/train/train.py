@@ -39,11 +39,11 @@ def train(cfg: TrainConfig) -> Path:
         "train", processor, cfg.data_dir, limit=cfg.train_limit, max_length=cfg.max_length
     )
 
-    # Use the GPU's tensor cores in mixed precision: ~2x faster and ~half the VRAM, so the
-    # micro-batch fits in 8 GB and never spills to shared system memory (the Windows WDDM
-    # fallback that makes steps ~100x slower). Prefer bf16 on Ampere+, else fp16.
-    # (LayoutLMv3 doesn't support gradient checkpointing, so we rely on bf16 + a small
-    # micro-batch with gradient accumulation for the effective batch size.)
+    # Train in mixed precision on the GPU. This is not just a speedup: at fp32 even a micro-batch
+    # of 2 overflows 8 GB and spills to shared system memory (the Windows WDDM fallback), making
+    # steps ~10x slower (~27 s/it vs ~2.5 s/it). Halving the footprint keeps it resident in VRAM.
+    # LayoutLMv3 has no gradient checkpointing, so precision + a small micro-batch (with gradient
+    # accumulation for the effective batch) is what makes training practical here.
     use_cuda = torch.cuda.is_available()
     use_bf16 = use_cuda and torch.cuda.is_bf16_supported()
     use_fp16 = use_cuda and not use_bf16
