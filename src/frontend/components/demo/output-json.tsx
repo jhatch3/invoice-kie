@@ -1,5 +1,6 @@
 "use client";
 
+import type { ExtractMode } from "@/lib/extract-client";
 import type { ExtractionResult, RunStatus } from "@/lib/types";
 
 function lit(value: string | number | null): string {
@@ -19,9 +20,10 @@ interface OutputJsonProps {
   seller: string | null;
   result: ExtractionResult | null;
   status: RunStatus;
+  mode: ExtractMode | null;
 }
 
-export function OutputJson({ fileName, seller, result, status }: OutputJsonProps) {
+export function OutputJson({ fileName, seller, result, status, mode }: OutputJsonProps) {
   const items = result?.lineItems ?? [];
   const itemLines =
     items.length === 0
@@ -52,7 +54,14 @@ export function OutputJson({ fileName, seller, result, status }: OutputJsonProps
     <div className="border border-border">
       <div className="flex items-center justify-between border-b border-border px-4 py-2.5 font-mono text-xs tracking-wide text-muted-foreground uppercase">
         <span>output.json</span>
-        <span>{LABEL[status]}</span>
+        <span className="flex items-center gap-3">
+          {mode && status === "done" && (
+            <span className={mode === "live" ? "text-foreground" : ""}>
+              {mode === "live" ? "● live model" : "○ demo · mock"}
+            </span>
+          )}
+          <span>{LABEL[status]}</span>
+        </span>
       </div>
       <pre
         className={`overflow-x-auto px-4 py-4 font-mono text-xs leading-relaxed ${

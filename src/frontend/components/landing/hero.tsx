@@ -36,6 +36,9 @@ export function Hero() {
 
       <div className="mt-16">
         <HeroStats />
+        <p className="mt-4 font-mono text-xs text-muted-foreground">
+          Illustrative figures — measured for real once the model is evaluated.
+        </p>
       </div>
     </section>
   );

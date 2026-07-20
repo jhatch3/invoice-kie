@@ -13,8 +13,11 @@ export function TryPipeline() {
         </h2>
       </div>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
-        Pick a sample invoice or upload your own, then run the pipeline. Extraction is simulated in
-        your browser with pre-computed outputs from the fine-tuned model.
+        Pick a sample or upload your own receipt, then run it. With the backend running it calls the
+        real model; otherwise a built-in mock keeps the demo working.
+      </p>
+      <p className="mt-2 font-mono text-xs text-muted-foreground">
+        browser → Next.js /api/extract → FastAPI → LayoutLMv3
       </p>
       <div className="mt-12">
         <DemoConsole />

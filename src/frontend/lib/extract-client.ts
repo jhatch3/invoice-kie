@@ -1,13 +1,17 @@
 import type { ExtractionResult } from "./types";
 
+export type ExtractMode = "live" | "mock";
+
+export interface ExtractOutcome {
+  result: ExtractionResult;
+  mode: ExtractMode;
+}
+
 /**
- * Posts a PDF to the mock extraction endpoint.
- *
- * NOTE: `/api/extract` is a frontend-only Next.js Route Handler that returns fixture data.
- * When the real FastAPI backend is built, point this at it (and generate the return type from
- * its OpenAPI schema). No component changes required.
+ * Posts a document to `/api/extract` (a Next.js Route Handler) and returns the extracted fields
+ * plus whether they came from the live FastAPI backend or the built-in mock.
  */
-export async function postExtract(file: File): Promise<ExtractionResult> {
+export async function postExtract(file: File): Promise<ExtractOutcome> {
   const body = new FormData();
   body.append("file", file);
 
@@ -15,5 +19,8 @@ export async function postExtract(file: File): Promise<ExtractionResult> {
   if (!res.ok) {
     throw new Error(`Extraction failed (${res.status})`);
   }
-  return (await res.json()) as ExtractionResult;
+
+  const mode: ExtractMode = res.headers.get("X-Extract-Mode") === "live" ? "live" : "mock";
+  const result = (await res.json()) as ExtractionResult;
+  return { result, mode };
 }

@@ -7,7 +7,7 @@ import { UploadDropzone } from "./upload-dropzone";
 import { PdfViewer } from "./pdf-viewer";
 import { OutputJson } from "./output-json";
 import { samples, type SampleRecord } from "@/lib/samples";
-import { postExtract } from "@/lib/extract-client";
+import { postExtract, type ExtractMode } from "@/lib/extract-client";
 import { cn } from "@/lib/utils";
 import type { ExtractionResult, RunStatus } from "@/lib/types";
 
@@ -22,6 +22,7 @@ export function DemoConsole() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<RunStatus>("idle");
   const [result, setResult] = useState<ExtractionResult | null>(null);
+  const [mode, setMode] = useState<ExtractMode | null>(null);
 
   useEffect(() => {
     if (!file) {
@@ -37,6 +38,7 @@ export function DemoConsole() {
     setFile(next);
     setCurrent(currentInfo);
     setResult(null);
+    setMode(null);
     setStatus("idle");
   }
 
@@ -58,8 +60,9 @@ export function DemoConsole() {
     setStatus("running");
     setResult(null);
     try {
-      const extracted = await postExtract(file);
-      setResult(extracted);
+      const outcome = await postExtract(file);
+      setResult(outcome.result);
+      setMode(outcome.mode);
       setStatus("done");
     } catch {
       setStatus("error");
@@ -71,7 +74,7 @@ export function DemoConsole() {
       {/* Left: choose a document, then run */}
       <div className="flex flex-col gap-4">
         <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">
-          Sample invoices
+          Sample receipts
         </p>
         <ul className="flex flex-col gap-2">
           {samples.map((sample) => (
@@ -147,6 +150,7 @@ export function DemoConsole() {
           seller={current?.seller ?? null}
           result={result}
           status={status}
+          mode={mode}
         />
       </div>
     </div>

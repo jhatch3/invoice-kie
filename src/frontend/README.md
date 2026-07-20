@@ -8,8 +8,12 @@ root `README.md` for the overall project.
 
 - Next.js 16 (App Router) · React 19 · TypeScript
 - Tailwind CSS v4 + shadcn/ui (editorial, monochrome look)
-- Extraction is currently **mocked** by a Next.js Route Handler (`app/api/extract`) that returns
-  the CORD target schema. It is a stub, not the real model.
+- Extraction goes through a Next.js Route Handler (`app/api/extract`) that **proxies to the FastAPI
+  backend** when `BACKEND_URL` is set and reachable, and falls back to a built-in **mock**
+  otherwise — so the demo always works. To use the real model locally, set
+  `BACKEND_URL=http://localhost:8000` in `.env.local` and start the backend
+  (`uvicorn app.main:app` from `src/backend`). The demo shows a `live model` / `demo · mock`
+  label so it's clear which ran.
 
 ## Develop
 
