@@ -6,14 +6,16 @@ the Phase-3 eval harness.
 
 from __future__ import annotations
 
+from app.extraction.constants import MODEL_VERSION
+from app.extraction.exceptions import ExtractionFailed
 from app.extraction.pipeline import Pipeline
 from app.extraction.schemas import ExtractResponse
-from backend.app.extraction.exceptions import ExtractionFailed
 
 
 def extract_one(content: bytes, filename: str, pipeline: Pipeline) -> ExtractResponse:
     """Run the pipeline on a single document and wrap it in an ExtractResponse."""
-    raise NotImplementedError
+    result = pipeline.extract(content, filename)
+    return ExtractResponse(source_file=filename, model_version=MODEL_VERSION, result=result)
 
 
 def run_batch(

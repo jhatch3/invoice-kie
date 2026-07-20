@@ -6,16 +6,36 @@ overridden with a deterministic stub via `dependency_overrides` (never monkeypat
 
 from __future__ import annotations
 
-import pytest
+from collections.abc import AsyncIterator
+
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+
+from app.extraction.pipeline import get_pipeline
+from app.extraction.schemas import ExtractionResult, LineItem
+from app.main import create_app
 
 
-@pytest.fixture
-def stub_pipeline():
-    """A deterministic Pipeline returning a fixed ExtractionResult, for overriding get_pipeline."""
-    raise NotImplementedError
+class StubPipeline:
+    """Deterministic pipeline used in tests (no model, no I/O)."""
+
+    def extract(self, content: bytes, filename: str) -> ExtractionResult:
+        return ExtractionResult(
+            subtotal="10.00",
+            tax="1.00",
+            total="11.00",
+            currency="USD",
+            confidence=0.9,
+            line_items=[LineItem(name="Widget", qty="2", unit_price="5.00", price="10.00")],
+        )
 
 
-@pytest.fixture
-async def client(stub_pipeline):
+@pytest_asyncio.fixture
+async def client() -> AsyncIterator[AsyncClient]:
     """httpx.AsyncClient bound to the app (ASGITransport) with get_pipeline overridden."""
-    raise NotImplementedError
+    app = create_app()
+    app.dependency_overrides[get_pipeline] = lambda: StubPipeline()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as http_client:
+        yield http_client
+    app.dependency_overrides.clear()

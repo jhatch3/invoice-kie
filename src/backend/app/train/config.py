@@ -17,7 +17,10 @@ class TrainConfig:
 
     epochs: float = 5.0
     learning_rate: float = 5e-5
+    # Keep the per-device micro-batch small so it fits in 8 GB VRAM (avoids the Windows
+    # shared-memory spill that makes steps ~100x slower); use accumulation for effective batch.
     train_batch_size: int = 2
+    gradient_accumulation_steps: int = 4  # effective batch = train_batch_size * this
     max_length: int = 512
     seed: int = 42
 

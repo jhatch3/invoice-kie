@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import torch
 from transformers import (
     LayoutLMv3ForTokenClassification,
     LayoutLMv3Processor,
@@ -38,13 +39,25 @@ def train(cfg: TrainConfig) -> Path:
         "train", processor, cfg.data_dir, limit=cfg.train_limit, max_length=cfg.max_length
     )
 
+    # Use the GPU's tensor cores in mixed precision: ~2x faster and ~half the VRAM, so the
+    # micro-batch fits in 8 GB and never spills to shared system memory (the Windows WDDM
+    # fallback that makes steps ~100x slower). Prefer bf16 on Ampere+, else fp16.
+    # (LayoutLMv3 doesn't support gradient checkpointing, so we rely on bf16 + a small
+    # micro-batch with gradient accumulation for the effective batch size.)
+    use_cuda = torch.cuda.is_available()
+    use_bf16 = use_cuda and torch.cuda.is_bf16_supported()
+    use_fp16 = use_cuda and not use_bf16
+
     args = TrainingArguments(
         output_dir=str(cfg.output_dir),
         per_device_train_batch_size=cfg.train_batch_size,
+        gradient_accumulation_steps=cfg.gradient_accumulation_steps,
         num_train_epochs=cfg.epochs,
         max_steps=cfg.max_steps,
         learning_rate=cfg.learning_rate,
         seed=cfg.seed,
+        bf16=use_bf16,
+        fp16=use_fp16,
         logging_steps=5,
         save_strategy="no",
         report_to="none",

@@ -26,10 +26,10 @@ class Settings(BaseSettings):
     @property
     def docs_enabled(self) -> bool:
         """Whether interactive API docs should be served (hidden in production)."""
-        raise NotImplementedError
+        return self.environment != "production"
 
 
 @lru_cache
 def get_settings() -> Settings:
     """Return a cached Settings instance (constructed once per process)."""
-    raise NotImplementedError
+    return Settings()

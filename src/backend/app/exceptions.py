@@ -6,11 +6,8 @@ status code and a user-facing detail, and a single handler turns them into JSON 
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from fastapi import FastAPI, Request
-    from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 
 class AppError(Exception):
@@ -20,14 +17,16 @@ class AppError(Exception):
     detail: str = "Internal server error."
 
     def __init__(self, detail: str | None = None) -> None:
-        raise NotImplementedError
+        if detail is not None:
+            self.detail = detail
+        super().__init__(self.detail)
 
 
-async def app_error_handler(request: "Request", exc: AppError) -> "JSONResponse":
+async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
     """Render an AppError as `{"detail": ...}` with its status code."""
-    raise NotImplementedError
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
-def register_exception_handlers(app: "FastAPI") -> None:
+def register_exception_handlers(app: FastAPI) -> None:
     """Attach the AppError handler to the FastAPI app."""
-    raise NotImplementedError
+    app.add_exception_handler(AppError, app_error_handler)
