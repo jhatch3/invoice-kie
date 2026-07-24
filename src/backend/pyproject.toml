@@ -1,0 +1,4 @@
+[tool.ruff.lint]
+# Ignore B008 (function call in argument defaults) for FastAPI dependency injection patterns
+# which are idiomatic and unavoidable in FastAPI route handlers.
+ignore = ["B008"]

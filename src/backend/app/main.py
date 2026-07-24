@@ -9,6 +9,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.chat.router import router as chat_router
 from app.config import get_settings
 from app.exceptions import register_exception_handlers
 from app.extraction.router import router as extraction_router
@@ -42,6 +43,7 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
     app.add_api_route("/health", health, methods=["GET"], tags=["health"])
     app.include_router(extraction_router)
+    app.include_router(chat_router)
     return app
 
 

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from app.extraction.labels import (
     CORD_CATEGORIES,
-    build_label_list,
     bio_tag,
+    build_label_list,
     label_maps,
     target_field,
 )

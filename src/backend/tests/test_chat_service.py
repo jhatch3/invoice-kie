@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import anthropic
 import httpx
 import pytest
 
-import anthropic
 from app.chat.exceptions import ChatBadRequest, ChatRateLimited, ChatUnavailable
 from app.chat.service import ask
 
