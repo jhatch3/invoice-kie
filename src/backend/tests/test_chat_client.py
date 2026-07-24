@@ -8,6 +8,9 @@ from __future__ import annotations
 import base64
 from types import SimpleNamespace
 
+import anthropic
+import pytest
+
 from app.chat.client import AnthropicChatClient
 from app.config import Settings
 
@@ -63,3 +66,15 @@ def test_get_chat_client_is_singleton() -> None:
     from app.chat.client import get_chat_client
 
     assert get_chat_client() is get_chat_client()
+
+
+def test_reply_without_credentials_raises_anthropic_error(monkeypatch) -> None:
+    # anthropic.Anthropic() with no key does not raise at construction; it just sets
+    # api_key/auth_token to None and fails later inside messages.create() with a bare
+    # TypeError. The client must catch that missing-credentials case at construction
+    # time and raise anthropic.AnthropicError instead, so the service's
+    # `except anthropic.AnthropicError` maps it to a clean 503.
+    monkeypatch.setattr(anthropic, "Anthropic", lambda: SimpleNamespace(api_key=None, auth_token=None))
+    client = AnthropicChatClient(settings=Settings())
+    with pytest.raises(anthropic.AnthropicError):
+        client.reply(b"x", "image/png", "hi")

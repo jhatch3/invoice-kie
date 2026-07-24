@@ -41,7 +41,14 @@ class AnthropicChatClient:
 
     def _client(self) -> anthropic.Anthropic:
         if self._sdk is None:
-            self._sdk = anthropic.Anthropic()  # may raise anthropic.AnthropicError (no creds)
+            sdk = anthropic.Anthropic()
+            # anthropic.Anthropic() does not raise when no key/token is configured — it just
+            # sets api_key/auth_token to None and only fails later, inside messages.create(),
+            # with a bare TypeError (not an AnthropicError subclass). Raise here instead so the
+            # service's `except anthropic.AnthropicError` maps missing credentials to a clean 503.
+            if sdk.api_key is None and sdk.auth_token is None:
+                raise anthropic.AnthropicError("Missing Anthropic credentials (no api_key or auth_token).")
+            self._sdk = sdk
         return self._sdk
 
     def reply(self, image: bytes, media_type: str, message: str) -> str:
