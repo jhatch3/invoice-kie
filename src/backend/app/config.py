@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     environment: Environment = "local"
     cors_origins: list[str] = ["http://localhost:3000"]
+    chat_model: str = "claude-opus-4-8"
 
     @property
     def docs_enabled(self) -> bool:

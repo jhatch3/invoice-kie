@@ -7,6 +7,7 @@ uvicorn[standard]>=0.30
 pydantic>=2.7
 pydantic-settings>=2.3
 python-multipart>=0.0.9   # multipart/form-data file uploads
+anthropic>=0.97          # Claude API client for the vision chatbot (POST /chat)
 
 # --- Modeling (Phase 2: train + serve LayoutLMv3) ---
 # For GPU training install a CUDA torch build from https://pytorch.org (this pin is CPU-ok).
